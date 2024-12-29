@@ -48,14 +48,16 @@ Example:
 The VAE consists of the following components:
 1. Encoder
 The encoder extracts features from input images and maps them to the latent space. It outputs:
+
 Mean (μ): Center of the latent distribution.
 Log-variance (σ²): Spread of the latent distribution.
-2. Latent Sampling
+3. Latent Sampling
 Latent vectors are sampled using the reparameterization trick:
+
 z=μ+σ⋅ε,ε∼N(0,1)z = μ + σ \cdot ε, \quad ε \sim \mathcal{N}(0, 1)
-3. Decoder
+4. Decoder
 The decoder reconstructs images from the latent vectors.
-4. VAE Class
+5. VAE Class
 Combines the encoder and decoder into a single model pipeline.
 
 # Training
@@ -64,6 +66,7 @@ Device: Training is performed on a GPU (CUDA) if available.
 Data Loader:
 Training images are resized to 56x56 pixels.
 Pixel values are normalized to the range [-1, 1].
+
 Loss Function
 The VAE loss combines two components:
 Reconstruction Loss (L_recon):
@@ -74,22 +77,28 @@ KL Divergence Loss (L_KL):
 
 
 Ensures the latent space follows a standard normal distribution: LKL=−0.5∑(1+log⁡(σ2)−μ2−σ2)L_{KL} = -0.5 \sum \left( 1 + \log(\sigma^2) - \mu^2 - \sigma^2 \right)
-Total Loss:
+# Total Loss:
+
  Ltotal=Lrecon+β⋅LKLL_{total} = L_{recon} + \beta \cdot L_{KL}
+
 Beta (β): Weighting factor for KL divergence (default: 0.00025).
-Training Pipeline
+# Training Pipeline
+
 Forward pass: Input images → Encoder → Latent Space → Decoder → Output images.
 Loss calculation: Compute LreconL_{recon}, LKLL_{KL}, and LtotalL_{total}.
+
 Backpropagation: Update weights using the Adam optimizer.
 Save intermediate reconstructed images and model checkpoints.
 
-Outputs
+# Outputs
 Reconstructed Images:
+
 Sample reconstructions are saved during training (outputs/reconstructed.png).
 Model Checkpoints:
 Saved after each epoch (models/saved_models/vae_model_epoch_{epoch}.pth).
 
-Visualization
+# Visualization
 The notebook generates a loss curve showing the VAE's training progress:
+
 X-axis: Epoch number.
 Y-axis: Average loss per epoch.
